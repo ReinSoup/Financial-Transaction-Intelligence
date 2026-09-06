@@ -119,6 +119,11 @@ Real-world bank export integration
 Advanced anomaly detection
 
 
+
+Need improvements in loader
+need improvements in schema mapper
+need improvements in file detector
+
 Author
 
 Abdul

@@ -4,4 +4,4 @@ df = run_ingestion_pipeline(
     "data/raw/sample_transactions.csv"
 )
 
-print(df.head())
+print(df)

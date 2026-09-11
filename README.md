@@ -2233,7 +2233,7 @@ Behavioral indicators are statistical interpretations of transaction patterns an
 
 # Author
 
-Abdul
+Abdul Rab & Bonthu Sai Vennela
 
 ---
 

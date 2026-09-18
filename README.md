@@ -125,4 +125,4 @@ Real financial information will not be committed to the repository.
 
 ## Authors
 
-Abdul Rab & Bonthu Sai Vennela
+Abdul Rab

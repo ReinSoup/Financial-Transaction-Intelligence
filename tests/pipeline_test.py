@@ -3,6 +3,7 @@ from src.ingestion import load_csv
 from src.schema_mapper import map_columns
 from src.schema_validation import validate_schema
 from src.data_validation import validate_data
+from src.data_preprocessing import preprocess_data
 
 
 # Stage 1: Load the raw CSV.
@@ -55,5 +56,24 @@ else:
                     ["customer_id", "date", "amount", "validation_issues"]
                 ].head(10).to_string(index=False)
             )
+
+                        # Stage 5: Preprocess accepted transactions.
+            accepted_df = report["accepted"]
+
+            preprocessing_result = preprocess_data(accepted_df)
+
+            cleaned_df = preprocessing_result["cleaned"]
+            processing_report = preprocessing_result["report"]
+
+            print("\nStage 5 complete: Preprocessing finished.")
+
+            print("\nPreprocessing report:")
+            print(processing_report)
+
+            print("\nFirst five cleaned transactions:")
+            print(cleaned_df.head())
+
+            print("\nCleaned data types:")
+            print(cleaned_df.dtypes)
 
             print("\nPipeline completed.")

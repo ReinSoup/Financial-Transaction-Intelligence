@@ -1,9 +1,10 @@
-
+from pathlib import Path
 from src.ingestion import load_csv
 from src.schema_mapper import map_columns
 from src.schema_validation import validate_schema
 from src.data_validation import validate_data
 from src.data_preprocessing import preprocess_data
+from src.data_enrichment import enrich_data
 
 
 # Stage 1: Load the raw CSV.
@@ -57,7 +58,7 @@ else:
                 ].head(10).to_string(index=False)
             )
 
-                        # Stage 5: Preprocess accepted transactions.
+            # Stage 5: Preprocess accepted transactions.
             accepted_df = report["accepted"]
 
             preprocessing_result = preprocess_data(accepted_df)
@@ -75,5 +76,44 @@ else:
 
             print("\nCleaned data types:")
             print(cleaned_df.dtypes)
+
+            # Stage 6: Enrich transaction dates.
+            enrichment_result = enrich_data(cleaned_df)
+
+            enriched_df = enrichment_result["enriched"]
+            enrichment_report = enrichment_result["report"]
+
+            print("\nStage 6 complete: Date enrichment finished.")
+
+            print("\nEnrichment report:")
+            print(enrichment_report)
+
+            print("\nFirst ten enriched date records:")
+            print(
+                enriched_df[
+                    [
+                        "date",
+                        "year",
+                        "month",
+                        "day_of_week",
+                        "is_weekend",
+                    ]
+                ].head(10)
+            )
+
+            # Check that enrichment preserved the row count.
+            print("\nEnrichment row-count check:")
+            print("Cleaned rows:", len(cleaned_df))
+            print("Enriched rows:", len(enriched_df))
+            print("Row count preserved:", len(cleaned_df) == len(enriched_df))
+            
+            
+            output_dir = Path("data/processed")
+            output_path = output_dir / "enriched_transactions.csv"
+
+            enriched_df.to_csv(output_path, index= False)
+            print(f"Enriched dataset saved to: {output_path}")
+
+
 
             print("\nPipeline completed.")

@@ -5,6 +5,7 @@ from src.schema_validation import validate_schema
 from src.data_validation import validate_data
 from src.data_preprocessing import preprocess_data
 from src.data_enrichment import enrich_data
+from src.feature_engineering import customer_features
 
 
 # Stage 1: Load the raw CSV.
@@ -113,6 +114,18 @@ else:
 
             enriched_df.to_csv(output_path, index= False)
             print(f"Enriched dataset saved to: {output_path}")
+
+            # building customer level behavioral features
+
+            customer_features_df = customer_features(enriched_df)
+
+            print(customer_features_df.head())
+
+            print("saving to processed...")
+
+            output_path_feature = output_dir / "customer_features.csv"
+
+            customer_features_df.to_csv(output_path_feature, index = False)
 
 
 

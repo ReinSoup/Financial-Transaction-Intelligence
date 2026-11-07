@@ -1,0 +1,67 @@
+{
+  "generation_version": "v2.0",
+  "random_seed": 20261102,
+  "customer_count": 180,
+  "transaction_count": 56421,
+  "date_range": [
+    "2025-01-01",
+    "2025-12-31"
+  ],
+  "currency": "INR",
+  "customer_profile_distribution": {
+    "household": 52,
+    "freelancer": 19,
+    "high_discretionary_professional": 22,
+    "student": 40,
+    "salaried_individual": 47
+  },
+  "transaction_direction_distribution": {
+    "Debit": 53274,
+    "Credit": 3147
+  },
+  "category_distribution": {
+    "Shopping": 5462,
+    "Food & Dining": 8231,
+    "Housing": 1764,
+    "Transport": 7392,
+    "Entertainment": 3135,
+    "Groceries": 10051,
+    "Income": 3147,
+    "Travel": 2359,
+    "Healthcare": 3635,
+    "Investment": 1596,
+    "Personal Care": 2581,
+    "Bills & Utilities": 4320,
+    "Education": 2748
+  },
+  "anomaly_count": 354,
+  "anomaly_rate": 0.006274,
+  "anomaly_count_by_type": {
+    "recurring_amount_shift": 144,
+    "income_outlier": 90,
+    "amount_spike": 120
+  },
+  "anomaly_severity_distribution": {
+    "medium": 144,
+    "high": 210
+  },
+  "anomaly_event_count": 282,
+  "anomaly_event_count_by_type": {
+    "amount_spike": 120,
+    "income_outlier": 90,
+    "recurring_amount_shift": 72
+  },
+  "anomalies_eligible_for_customer_relative_evaluation": 354,
+  "generation_rules": {
+    "baseline": "customer_id + transaction_type + category; at least five prior daily observations",
+    "amount_spike": "120 mature customers; final amount at least 5x prior daily median",
+    "income_outlier": "90 mature Income-credit customers; final amount at least 3.5x prior daily median",
+    "recurring_amount_shift": "72 two-occurrence shifts in genuine monthly recurring sequences, each 2.5x-3.5x prior levels",
+    "amount_convention": "raw values vary in presentation; preprocessing assigns final signed amounts from direction"
+  },
+  "validation": {
+    "passed": 8,
+    "failed": 0,
+    "eligible_anomaly_rows": 354
+  }
+}

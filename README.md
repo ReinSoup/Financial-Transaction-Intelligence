@@ -4,7 +4,7 @@ An analytical project that turns transaction data into customer spending pattern
 
 ## Project status
 
-The analytical backend is implemented and tested against the local synthetic v2.0 dataset. A first Streamlit dashboard is available at `app/app.py`.
+The analytical backend is implemented and tested against the local synthetic v2.0 dataset. The Streamlit dashboard is available at `app/app.py`.
 
 | Area | Status | Details |
 |---|---|---|
@@ -16,7 +16,7 @@ The analytical backend is implemented and tested against the local synthetic v2.
 | Statistical analysis | Implemented and tested | Descriptive statistics, IQR bounds, customer-level debit summaries, and one exploratory Welch comparison |
 | Explainable insights | Implemented and tested | Rule-based outputs tied to customer, transaction, category, cluster, and measured values |
 | Analytical integration | Implemented and tested | `run_analytical_pipeline` returns separate customer-level and transaction-level outputs |
-| Streamlit dashboard | Implemented | CSV upload, data quality feedback, cash-flow overview, cluster profiles, anomaly review, and limitations |
+| Streamlit dashboard | Implemented | Five plain-language sections, cash-flow and category charts, monthly spending heatmap, customer profiles, anomaly review, and data-quality feedback |
 
 ## Dataset
 
@@ -77,7 +77,7 @@ From the repository root, start the app with:
 .\venv\Scripts\python.exe -m streamlit run app/app.py
 ```
 
-The dashboard accepts a CSV with transaction ID, customer ID, date, amount, category, and transaction direction. Common source header aliases are mapped by the existing schema mapper. Processing occurs in memory; optional validation issues are summarized, while rows with invalid customer IDs, dates, or amounts are rejected by the existing validator. The app displays descriptive summaries and exploratory model outputs with their interpretation limits.
+The dashboard accepts a CSV with transaction ID, customer ID, date, amount, category, and transaction direction. Select the file and click **Analyze transactions** to begin. Common source header aliases are mapped by the existing schema mapper. It presents results in five plain-language sections, with cash-flow and category charts, monthly spending and customer-profile heatmaps, cluster comparisons, an anomaly timeline, and data-quality feedback. Processing occurs in memory, charts follow the active Streamlit theme, and interpretation limits remain visible throughout. An optional evaluation-label CSV can be supplied with `transaction_id` and `is_injected_anomaly` columns; labels are used only after predictions are made.
 
 ## Reproduce and test
 

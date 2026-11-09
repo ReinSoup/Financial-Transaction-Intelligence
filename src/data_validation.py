@@ -2,12 +2,16 @@ import logging
 import pandas as pd
 import re
 
+from src.schema_mapper import map_columns
+
 logger = logging.getLogger(__name__)
 
 REQUIRED_COLUMNS = ["customer_id", "date", "amount"]
 
 def validate_data(df):
-    data = df.copy()
+    data = map_columns(df)
+    if data is None:
+        raise ValueError("Column names map to duplicate canonical fields.")
 
     missing_columns = []
 

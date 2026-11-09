@@ -10,6 +10,7 @@ from src.customer_segmentation import (
     segment_customers,
 )
 from src.insight_generation import generate_insights
+from src.schema_mapper import map_columns
 from src.statistical_analysis import (
     build_customer_debit_summary,
     compare_customer_groups,
@@ -28,7 +29,19 @@ def run_analytical_pipeline(
     if processed_transactions.empty:
         raise ValueError("Processed transaction data is empty.")
 
-    transaction_rows = processed_transactions.copy()
+    transaction_rows = map_columns(processed_transactions)
+    if transaction_rows is None:
+        raise ValueError("Transaction columns map to duplicate canonical fields.")
+
+    if anomaly_labels is not None:
+        anomaly_labels = map_columns(anomaly_labels)
+        if anomaly_labels is None:
+            raise ValueError("Anomaly label columns map to duplicate canonical fields.")
+
+    if customer_reference is not None:
+        customer_reference = map_columns(customer_reference)
+        if customer_reference is None:
+            raise ValueError("Customer reference columns map to duplicate canonical fields.")
     customer_features = build_customer_behavior_features(transaction_rows)
 
     if len(customer_features) < 3:

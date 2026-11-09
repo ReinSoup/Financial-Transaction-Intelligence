@@ -2,11 +2,15 @@ import pandas as pd
 import logging 
 import datetime as dt
 
+from src.schema_mapper import map_columns
+
 logger = logging.getLogger(__name__)
 
 def enrich_data(cleaned_data):
 
-    data = cleaned_data.copy()
+    data = map_columns(cleaned_data)
+    if data is None:
+        raise ValueError("Column names map to duplicate canonical fields.")
 
     """ Adding date enrichment """
 

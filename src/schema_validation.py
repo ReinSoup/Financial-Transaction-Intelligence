@@ -1,10 +1,16 @@
 import logging
 
+from src.schema_mapper import map_columns
+
 logger = logging.getLogger(__name__)
 
 REQUIRED_COLUMNS = ["customer_id", "date", "description", "amount", "category", "transaction_type"]
 
 def validate_schema(df):
+    df = map_columns(df)
+    if df is None:
+        return False
+
     missing_columns = []
 
     for column in REQUIRED_COLUMNS:

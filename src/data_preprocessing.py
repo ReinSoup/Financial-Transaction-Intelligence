@@ -2,6 +2,8 @@ import logging
 import pandas as pd
 import re
 
+from src.schema_mapper import map_columns
+
 logger = logging.getLogger(__name__)
 
 
@@ -9,7 +11,9 @@ def preprocess_data(accepted_data):
 
     """Clean and Standardize accepted transaction data"""
 
-    cleaned_data = accepted_data.copy()
+    cleaned_data = map_columns(accepted_data)
+    if cleaned_data is None:
+        raise ValueError("Column names map to duplicate canonical fields.")
 
     required_columns = ["customer_id", "date", "amount", "transaction_type"]
 

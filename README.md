@@ -1,128 +1,119 @@
 # Financial Transaction Intelligence
 
-An ML-powered financial analytics project that transforms raw transaction data into meaningful spending patterns and anomaly signals.
+An analytical project that turns transaction data into customer spending patterns, unusual-transaction signals, descriptive statistics, and traceable insights. The current dataset is synthetic and denominated in INR.
 
-## Overview
+## Project status
 
-Financial transaction data is often messy and inconsistent. Merchant names, dates, amounts, categories, and column names can vary across different data sources.
+The pre-Streamlit analytical backend is implemented and tested against the local synthetic v2.0 dataset. Streamlit has not been implemented.
 
-Financial Transaction Intelligence processes this data through a complete data science pipeline:
+| Area | Status | Details |
+|---|---|---|
+| Ingestion and validation | Implemented and tested | CSV loading, schema mapping, validation, preprocessing, date enrichment, and customer-level baseline features |
+| Exploratory analysis | Completed | v2.0 transaction, customer, category, merchant, and time-period analysis |
+| Financial-scale segmentation | Exploratory | Existing three-feature K-Means baseline is preserved in `Customer_Segmentation.ipynb` |
+| Behavioral segmentation | Implemented and tested | Category spending shares, transaction count, average debit amount, weekend share, K-Means evaluation, profiles, and visualizations |
+| Transaction anomaly analysis | Experimental and tested | Past-only customer/category reference features, chronological holdout evaluation, Isolation Forest, and false-positive/false-negative review |
+| Statistical analysis | Implemented and tested | Descriptive statistics, IQR bounds, customer-level debit summaries, and one exploratory Welch comparison |
+| Explainable insights | Implemented and tested | Rule-based outputs tied to customer, transaction, category, cluster, and measured values |
+| Analytical integration | Implemented and tested | `run_analytical_pipeline` returns separate customer-level and transaction-level outputs |
+| Streamlit dashboard | Future work | Not implemented |
 
-```text
-Raw Transactions
-       ↓
-Ingestion & Validation
-       ↓
-Cleaning & Normalization
-       ↓
-Exploratory Data Analysis
-       ↓
-Feature Engineering
-       ↓
-Machine Learning
-   ┌───┴──────────┐
-   ↓              ↓
-Clustering   Anomaly Detection
-   ↓              ↓
-Behavioral      Unusual
-Patterns      Transactions
-   └──────┬───────┘
-          ↓
-   Explainable Insights
-          ↓
- Streamlit Dashboard
+## Dataset
+
+The frozen synthetic v2.0 dataset contains 56,421 transactions from 180 customers, covering January through December 2025. It uses INR and includes 354 injected anomaly labels. The labels are evaluation-only data and are never used as anomaly-model input features.
+
+The repository includes the source transactions, processed transactions, reference customer profiles, anomaly labels, and a generation manifest. The analytical pipeline reads these files but does not overwrite them.
+
+## Analytical workflow
+
+The reusable entry point is `src/analytics_pipeline.py`. It accepts processed transactions and optional reference labels and customer profiles, then returns:
+
+- Customer behavior features and cluster assignments.
+- Candidate cluster evaluation scores and original-unit cluster profiles.
+- Transaction predictions linked to `transaction_id` and supporting historical ratios.
+- Held-out anomaly metrics and a confusion matrix when labels are provided.
+- Debit amount summaries, IQR bounds, and an optional customer-level group comparison.
+- Structured rule-based insights.
+
+Customer and transaction outputs remain at their own data grains. The pipeline returns results in memory and does not write analytical outputs to the raw or processed data folders.
+
+To run the full analysis from the repository root:
+
+```powershell
+.\venv\Scripts\python.exe run_analytical_workflow.py
 ```
 
-The project focuses on understanding spending behavior through data rather than simply reporting transaction totals.
+The same workflow is available in `notebooks/analytical_workflow.ipynb`. Run the customer segmentation analysis in `notebooks/Customer_Segmentation.ipynb` and the anomaly workflow in `notebooks/transaction_anomaly.ipynb` for detailed tables, charts, and error review.
 
-## Key Features
+## Current analytical results
 
-* Ingests transaction data from CSV files
-* Standardizes inconsistent schemas
-* Cleans and normalizes dates, amounts, merchants, and categories
-* Performs exploratory data analysis on spending behavior
-* Engineers behavioral and spending features
-* Uses K-Means to identify behavioral patterns
-* Uses Isolation Forest to detect unusual transactions
-* Evaluates and interprets machine learning results
-* Generates simple, explainable insights
-* Presents results through an interactive Streamlit dashboard
+### Customer segmentation
 
-## Machine Learning
+The category-only K-Means analysis selected two clusters with a silhouette score of 0.595 on category percentage points. The mixed behavioral model also selected two clusters and scored 0.421 on its standardized feature set. The category-only and mixed assignments agree for 178 of 180 customers after matching by customer ID.
 
-### Behavioral Clustering
+The category profiles show a group averaging 34.3% of debit spending on Housing, and another averaging 21.0% on Education, 13.5% on Food & Dining, 12.9% on Transport, and 11.7% on Shopping. Median debit counts and amounts also differ between the groups; weekend transaction shares are similar. The original financial-scale baseline has three clusters and a silhouette score of 0.522 in a different feature space. These scores are not directly comparable and do not establish which grouping is more useful.
 
-K-Means clustering is used to group similar spending behavior based on engineered features such as transaction frequency, average transaction value, category spending ratios, and temporal spending patterns.
+Category shares add to 100%, so they are dependent features. Euclidean K-Means on percentage points is retained as a simple, interpretable educational baseline. The notebook documents this limitation and does not treat category shares as independent measurements.
 
-The resulting clusters are analyzed based on their characteristics rather than being treated as predefined labels.
+### Transaction anomaly analysis
 
-### Anomaly Detection
+The model builds historical medians from prior daily observations, separated by customer, transaction direction, and category. It falls back to category-and-direction history when a customer history is sparse. Isolation Forest models are trained separately for debit and credit transactions using an explicit 1% contamination assumption. The chronological training cutoff is October 19, 2025; evaluation covers 11,114 later transactions, including 63 injected anomalies.
 
-Isolation Forest is used to identify transactions that differ significantly from typical transaction behavior.
+On that held-out period, precision was 0.316, recall 0.587, F1 was 0.411, and average precision was 0.444. The confusion matrix contained 10,971 true negatives, 80 false positives, 26 false negatives, and 37 true positives. The model found more labeled anomalies at the cost of more false positives. These experimental results are limited to the injected labels. An anomaly is unusual relative to the modeled reference data; it is not a fraud determination.
 
-The system focuses on detecting unusual activity rather than attempting to determine whether a transaction is fraudulent.
+### Statistical analysis
 
-## Tech Stack
+The exploratory customer-level comparison found a lower average debit transaction amount for synthetic student-profile customers than for salaried-individual customers. The mean difference was -₹1,011.59 (student minus salaried individual), with a 95% Welch confidence interval from -₹1,131.42 to -₹891.76, p = 7.77 × 10⁻²⁷, and Hedges' g of -3.43. The test uses one aggregated value per customer rather than treating repeated transactions as independent. It describes these synthetic customer profiles only and should not be generalized to real populations.
 
-* Python
-* Pandas
-* NumPy
-* Scikit-learn
-* Matplotlib
-* Plotly
-* Streamlit
-* Jupyter
-* Git & GitHub
+### Explainable insights
 
-## Project Structure
+The rule-based component currently reports measured top-category shares above a 25% threshold, cluster average debit transaction counts, and flagged transaction explanations containing the observed amount and historical ratios. Insight text is generated from those calculations and model outputs; no LLM or unsupported financial advice is used.
+
+## Reproduce and test
+
+Run the complete pytest suite from the repository root:
+
+```powershell
+.\venv\Scripts\python.exe -m pytest tests -q
+```
+
+The suite covers the existing ingestion and preprocessing functionality and the new segmentation, anomaly, statistics, insight, and integration modules. The ingestion pipeline test writes into a temporary directory so it does not replace the checked-in processed datasets.
+
+## Known limitations
+
+- All analytical findings come from one synthetic year and 180 synthetic customers.
+- The anomaly model's contamination setting affects the number of flagged records. The reported metrics are modest and should be treated as experimental.
+- Customer/category historical baselines can be weak for sparse groups. Rows without sufficient past observations remain unscored.
+- The segmentation metrics are exploratory. Category proportions are compositional, and the mixed feature model gives more total dimensions to category shares than to the three transaction behavior features.
+- The Welch comparison is an exploratory test of synthetic customer profiles and does not support conclusions about real customer populations.
+- Rule-based insights describe measured values; they are not financial recommendations.
+- There is no Streamlit dashboard, database, live data integration, or fraud classification system.
+
+## Project structure
 
 ```text
-financial-transaction-intelligence/
-│
+Financial_Transaction_Intelligence/
 ├── app/
 ├── data/
+│   ├── processed/
 │   ├── raw/
-│   └── processed/
+│   └── reference/
 ├── notebooks/
 ├── src/
-│   ├── ingestion/
-│   ├── preprocessing/
-│   ├── features/
-│   ├── analytics/
-│   ├── ml/
-│   └── insights/
-├── models/
+│   ├── analytics_pipeline.py
+│   ├── anomaly_detection.py
+│   ├── customer_segmentation.py
+│   ├── data_enrichment.py
+│   ├── data_preprocessing.py
+│   ├── data_validation.py
+│   ├── feature_engineering.py
+│   ├── ingestion.py
+│   ├── insight_generation.py
+│   ├── schema_mapper.py
+│   ├── schema_validation.py
+│   └── statistical_analysis.py
 ├── tests/
+├── run_analytical_workflow.py
 ├── requirements.txt
 └── README.md
 ```
-
-## Project Status
-
-In development.
-
-Current focus:
-
-```text
-Ingestion
-    ↓
-Preprocessing
-    ↓
-EDA
-    ↓
-Feature Engineering
-    ↓
-Machine Learning
-    ↓
-Dashboard
-```
-
-## Privacy
-
-Only public, synthetic, or anonymized transaction data will be used for development and demonstration.
-
-Real financial information will not be committed to the repository.
-
-## Authors
-
-Abdul Rab

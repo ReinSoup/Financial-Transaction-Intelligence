@@ -4,7 +4,7 @@ An analytical project that turns transaction data into customer spending pattern
 
 ## Project status
 
-The pre-Streamlit analytical backend is implemented and tested against the local synthetic v2.0 dataset. Streamlit has not been implemented.
+The analytical backend is implemented and tested against the local synthetic v2.0 dataset. A first Streamlit dashboard is available at `app/app.py`.
 
 | Area | Status | Details |
 |---|---|---|
@@ -16,7 +16,7 @@ The pre-Streamlit analytical backend is implemented and tested against the local
 | Statistical analysis | Implemented and tested | Descriptive statistics, IQR bounds, customer-level debit summaries, and one exploratory Welch comparison |
 | Explainable insights | Implemented and tested | Rule-based outputs tied to customer, transaction, category, cluster, and measured values |
 | Analytical integration | Implemented and tested | `run_analytical_pipeline` returns separate customer-level and transaction-level outputs |
-| Streamlit dashboard | Future work | Not implemented |
+| Streamlit dashboard | Implemented | CSV upload, data quality feedback, cash-flow overview, cluster profiles, anomaly review, and limitations |
 
 ## Dataset
 
@@ -69,6 +69,16 @@ The exploratory customer-level comparison found a lower average debit transactio
 
 The rule-based component currently reports measured top-category shares above a 25% threshold, cluster average debit transaction counts, and flagged transaction explanations containing the observed amount and historical ratios. Insight text is generated from those calculations and model outputs; no LLM or unsupported financial advice is used.
 
+## Run the Streamlit dashboard
+
+From the repository root, start the app with:
+
+```powershell
+.\venv\Scripts\python.exe -m streamlit run app/app.py
+```
+
+The dashboard accepts a CSV with transaction ID, customer ID, date, amount, category, and transaction direction. Common source header aliases are mapped by the existing schema mapper. Processing occurs in memory; optional validation issues are summarized, while rows with invalid customer IDs, dates, or amounts are rejected by the existing validator. The app displays descriptive summaries and exploratory model outputs with their interpretation limits.
+
 ## Reproduce and test
 
 Run the complete pytest suite from the repository root:
@@ -87,13 +97,15 @@ The suite covers the existing ingestion and preprocessing functionality and the 
 - The segmentation metrics are exploratory. Category proportions are compositional, and the mixed feature model gives more total dimensions to category shares than to the three transaction behavior features.
 - The Welch comparison is an exploratory test of synthetic customer profiles and does not support conclusions about real customer populations.
 - Rule-based insights describe measured values; they are not financial recommendations.
-- There is no Streamlit dashboard, database, live data integration, or fraud classification system.
+- The Streamlit dashboard is a local prototype; there is no database or live data integration.
+- Anomaly flags are experimental statistical signals, not fraud classifications.
 
 ## Project structure
 
 ```text
 Financial_Transaction_Intelligence/
 ├── app/
+│   └── app.py
 ├── data/
 │   ├── processed/
 │   ├── raw/

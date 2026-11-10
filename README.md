@@ -6,6 +6,12 @@ An analytical project that turns transaction data into customer spending pattern
 
 **Sample files:** [Download Synthetic__Data](data/raw/synthetic_transactions_messy.csv) · [Download anomaly labels](data/reference/synthetic_anomaly_labels.csv)
 
+![Dashboard_Screenshot](docs/DashboardFrontPage.png)
+
+![DashboardAnomalyDetection](docs/AnomalyDashboard.png)
+
+
+
 ## Project status
 
 The project is complete. The analytical backend is implemented and tested against the local synthetic v2.0 dataset, and the Streamlit dashboard is deployed at [reinsoup-money-map.streamlit.app](https://reinsoup-money-map.streamlit.app/).
@@ -118,7 +124,15 @@ Financial_Transaction_Intelligence/
 │   ├── processed/
 │   ├── raw/
 │   └── reference/
+├── docs/
+│   ├── AnomalyDashboard.png
+│   └── DashboardFrontPage.png
 ├── notebooks/
+|   ├── analytical_workflow.ipynb
+│   ├── customer_segmentation.ipynb
+│   ├── transaction_anomaly.ipynb
+│   ├── v1_EDA.ipynb
+│   └── v2_EDA.ipynb
 ├── src/
 │   ├── analytics_pipeline.py
 │   ├── anomaly_detection.py

@@ -4,7 +4,7 @@ An analytical project that turns transaction data into customer spending pattern
 
 **Live dashboard:** [Financial Transaction Intelligence](https://reinsoup-money-map.streamlit.app/)
 
-**Sample files:** [Download Synthetic__Data.csv](data/raw/synthetic_transactions_messy.csv) · [Download anomaly_labels.csv](data/reference/synthetic_anomaly_labels.csv)
+**Sample files:** [Download Synthetic__Data](blob:https://github.com/02100cc7-5971-4e73-9276-0314aac7f5f0) · [Download anomaly_labels](blob:https://github.com/e8363246-01ec-4b77-a82f-f9b1114a435b)
 
 ## Project status
 

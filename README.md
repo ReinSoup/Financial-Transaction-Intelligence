@@ -3,6 +3,7 @@
 An analytical project that turns transaction data into customer spending patterns, unusual-transaction signals, descriptive statistics, and traceable insights. The current dataset is synthetic and denominated in INR.
 
 **Live dashboard:** [Financial Transaction Intelligence](https://reinsoup-money-map.streamlit.app/)
+**Sample files:** [Download syntheticmessy.csv](data/raw/syntheticmessy.csv) · [Download labels.csv](data/reference/labels.csv)
 
 ## Project status
 

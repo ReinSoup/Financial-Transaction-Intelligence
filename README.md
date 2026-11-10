@@ -2,9 +2,11 @@
 
 An analytical project that turns transaction data into customer spending patterns, unusual-transaction signals, descriptive statistics, and traceable insights. The current dataset is synthetic and denominated in INR.
 
+**Live dashboard:** [Financial Transaction Intelligence](https://reinsoup-money-map.streamlit.app/)
+
 ## Project status
 
-The analytical backend is implemented and tested against the local synthetic v2.0 dataset. The Streamlit dashboard is available at `app/app.py`.
+The project is complete. The analytical backend is implemented and tested against the local synthetic v2.0 dataset, and the Streamlit dashboard is deployed at [reinsoup-money-map.streamlit.app](https://reinsoup-money-map.streamlit.app/).
 
 | Area | Status | Details |
 |---|---|---|
@@ -97,8 +99,12 @@ The suite covers the existing ingestion and preprocessing functionality and the 
 - The segmentation metrics are exploratory. Category proportions are compositional, and the mixed feature model gives more total dimensions to category shares than to the three transaction behavior features.
 - The Welch comparison is an exploratory test of synthetic customer profiles and does not support conclusions about real customer populations.
 - Rule-based insights describe measured values; they are not financial recommendations.
-- The Streamlit dashboard is a local prototype; there is no database or live data integration.
+- The deployed Streamlit dashboard analyzes uploaded CSV files; it does not connect to a database or live financial accounts.
 - Anomaly flags are experimental statistical signals, not fraud classifications.
+
+## Project completion
+
+The project is complete, with an implemented analytical workflow, documented findings and limitations, tests, and a deployed interactive dashboard. The dashboard is ready to explore using a compatible transaction CSV. This is an educational analysis built on synthetic data; its patterns and experimental anomaly signals do not represent real customers or establish fraud.
 
 ## Project structure
 
@@ -129,3 +135,6 @@ Financial_Transaction_Intelligence/
 ├── requirements.txt
 └── README.md
 ```
+
+
+## 

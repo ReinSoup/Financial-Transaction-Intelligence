@@ -14,7 +14,10 @@ An analytical project that turns transaction data into customer spending pattern
 
 ## Project status
 
-The project is complete. The analytical backend is implemented and tested against the local synthetic v2.0 dataset, and the Streamlit dashboard is deployed at [reinsoup-money-map.streamlit.app](https://reinsoup-money-map.streamlit.app/).
+The project is complete, with an implemented analytical workflow, documented findings, limitations, tests, and a deployed interactive dashboard, tested against the local synthetic v2.0 dataset. The dashboard is ready to explore using a compatible transaction CSV. This is an educational analysis built on synthetic data; its patterns and experimental anomaly signals do not represent real customers or establish fraud.
+
+ Streamlit dashboard is deployed at [reinsoup-money-map.streamlit.app](https://reinsoup-money-map.streamlit.app/).
+
 
 | Area | Status | Details |
 |---|---|---|
@@ -110,9 +113,6 @@ The suite covers the existing ingestion and preprocessing functionality and the 
 - The deployed Streamlit dashboard analyzes uploaded CSV files; it does not connect to a database or live financial accounts.
 - Anomaly flags are experimental statistical signals, not fraud classifications.
 
-## Project completion
-
-The project is complete, with an implemented analytical workflow, documented findings and limitations, tests, and a deployed interactive dashboard. The dashboard is ready to explore using a compatible transaction CSV. This is an educational analysis built on synthetic data; its patterns and experimental anomaly signals do not represent real customers or establish fraud.
 
 ## Project structure
 
@@ -151,3 +151,27 @@ Financial_Transaction_Intelligence/
 ├── requirements.txt
 └── README.md
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software in accordance with the license terms.
+
+## Author
+
+**Abdul Rab (Ryan)**
+
+B.Tech Computer Science Engineering Student  
+Interested in Data Engineering, Data Analytics, and Machine Learning.
+
+## Acknowledgements
+
+- Python and its open-source data science ecosystem.
+- Pandas, NumPy, and Scikit-learn for data processing and machine learning.
+- Streamlit for interactive application development.
+- The open-source community for documentation and learning resources.
+
+## Disclaimer
+
+This project is an educational portfolio project developed for learning and demonstration purposes. It is not a financial advisory tool, banking application, or fraud detection system. Anomalies identified by the models should not be interpreted as confirmed fraudulent activity.
+
+The project uses synthetic financial transaction data and should not be used to make real-world financial decisions.
